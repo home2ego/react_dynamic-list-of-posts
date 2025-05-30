@@ -31,14 +31,18 @@ export const PostDetails: React.FC<Props> = ({
       .finally(() => setIsLoadingPost(false));
   }, [selectedPost]);
 
-  const handleCommentDelete = (commentId: number) => {
-    client.delete(`/comments/${commentId}`);
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      await client.delete(`/comments/${commentId}`);
 
-    const filteredComments = comments.filter(
-      comment => comment.id !== commentId,
-    );
+      const filteredComments = comments.filter(
+        comment => comment.id !== commentId,
+      );
 
-    setComments(filteredComments);
+      setComments(filteredComments);
+    } catch (err) {
+      alert(`Failed to delete comment: ${err}. Please try again.`);
+    }
   };
 
   return (
